@@ -10,6 +10,9 @@ import errorHandler from './middleware/errorHandler.js';
 import { apiRateLimiter } from './middleware/rateLimiter.js';
 import authRoutes from './routes/authRoutes.js';
 import addressRoutes from './routes/addressRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import productRoutes from './routes/productRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
 
 const app = express();
 
@@ -50,6 +53,9 @@ app.get(
 // Resource routes
 app.use('/api/auth', authRoutes);
 app.use('/api/addresses', addressRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // 404 handler for unknown API routes
 app.use((req, res) => {
