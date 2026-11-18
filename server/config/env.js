@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-dotenv.config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
@@ -23,5 +26,13 @@ const env = {
     rateLimitMaxRequests: Number(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
   },
 };
+
+export function validateEnv() {
+  if (!env.jwt.secret || env.jwt.secret.length < 32) {
+    throw new Error(
+      'Missing or weak JWT_SECRET in server/.env (must be at least 32 characters long).'
+    );
+  }
+}
 
 export default env;
