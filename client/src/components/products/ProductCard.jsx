@@ -3,11 +3,23 @@ import { ShoppingBag } from 'lucide-react';
 import Badge from '../common/Badge.jsx';
 import StarRating from '../common/StarRating.jsx';
 import { formatCurrency, getDiscountPercent } from '../../utils/formatters.js';
+import useCart from '../../hooks/useCart.js';
 
 export default function ProductCard({ product, onQuickAdd }) {
+  const { addToCart } = useCart();
   const discount = getDiscountPercent(product.price, product.compareAtPrice);
   const outOfStock = product.stockQuantity <= 0;
   const lowStock = !outOfStock && product.stockQuantity <= product.lowStockThreshold;
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    if (outOfStock) return;
+    if (onQuickAdd) {
+      onQuickAdd(product);
+    } else {
+      addToCart(product, 1);
+    }
+  };
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-stone-200/90 bg-white transition-all hover:border-stone-300 hover:shadow-md">
@@ -75,24 +87,15 @@ export default function ProductCard({ product, onQuickAdd }) {
             )}
           </div>
 
-          {onQuickAdd ? (
-            <button
-              type="button"
-              disabled={outOfStock}
-              onClick={() => onQuickAdd(product)}
-              className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xl bg-brand-500 px-3 text-xs font-semibold text-white hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-stone-200 disabled:text-slate-500"
-            >
-              <ShoppingBag className="h-3.5 w-3.5" />
-              Add
-            </button>
-          ) : (
-            <Link
-              to={`/products/${product.slug}`}
-              className="text-xs font-semibold text-brand-600 hover:text-brand-700"
-            >
-              View details &rarr;
-            </Link>
-          )}
+          <button
+            type="button"
+            disabled={outOfStock}
+            onClick={handleAdd}
+            className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xl bg-brand-500 px-3 text-xs font-semibold text-white hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-stone-200 disabled:text-slate-500 transition-colors"
+          >
+            <ShoppingBag className="h-3.5 w-3.5" />
+            {outOfStock ? 'Sold Out' : 'Add'}
+          </button>
         </div>
       </div>
     </article>

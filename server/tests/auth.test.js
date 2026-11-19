@@ -2,7 +2,7 @@ import { after, describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
 import app from '../app.js';
-import pool, { query } from '../config/db.js';
+import { query } from '../config/db.js';
 
 describe('Phase 4 — Authentication, Profile & Shipping Addresses API', () => {
   const testEmail = `phase4.test.${Date.now()}@koramarket.test`;
@@ -17,7 +17,6 @@ describe('Phase 4 — Authentication, Profile & Shipping Addresses API', () => {
     if (createdUserId) {
       await query('DELETE FROM users WHERE id = $1', [createdUserId]);
     }
-    await pool.end();
   });
 
   it('POST /api/auth/register rejects weak password and invalid email with 400', async () => {

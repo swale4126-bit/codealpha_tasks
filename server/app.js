@@ -13,6 +13,8 @@ import addressRoutes from './routes/addressRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 
 const app = express();
 
@@ -56,6 +58,8 @@ app.use('/api/addresses', addressRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
 
 // 404 handler for unknown API routes
 app.use((req, res) => {

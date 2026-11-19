@@ -11,14 +11,19 @@ import {
   X,
 } from 'lucide-react';
 import useAuth from '../../hooks/useAuth.js';
+import useCart from '../../hooks/useCart.js';
 import useToast from '../../hooks/useToast.js';
 
-export default function Navbar({ cartCount = 0, onOpenCart }) {
+export default function Navbar({ cartCount, onOpenCart }) {
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const { cart, openDrawer } = useCart();
   const toast = useToast();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const displayCount = cartCount !== undefined ? cartCount : cart.itemCount;
+  const handleCartClick = onOpenCart || openDrawer;
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -90,14 +95,14 @@ export default function Navbar({ cartCount = 0, onOpenCart }) {
           {/* Cart Button */}
           <button
             type="button"
-            onClick={() => (onOpenCart ? onOpenCart() : navigate('/cart'))}
-            aria-label={`Shopping cart (${cartCount} items)`}
+            onClick={handleCartClick}
+            aria-label={`Shopping cart (${displayCount} items)`}
             className="relative inline-flex h-10 cursor-pointer items-center gap-2 rounded-xl border border-stone-200 bg-white px-3 text-sm font-semibold text-slate-800 hover:bg-stone-50"
           >
             <ShoppingBag className="h-4 w-4 text-brand-600" />
             <span className="hidden sm:inline">Cart</span>
             <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-500 px-1.5 text-xs font-bold text-white">
-              {cartCount}
+              {displayCount}
             </span>
           </button>
 

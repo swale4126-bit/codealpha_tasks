@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Check, ChevronRight, Minus, Plus, ShieldCheck, ShoppingBag, Truck } from 'lucide-react';
 import { getProductByIdOrSlug } from '../../services/productService.js';
 import useToast from '../../hooks/useToast.js';
+import useCart from '../../hooks/useCart.js';
 import { extractApiError, formatCurrency, getDiscountPercent } from '../../utils/formatters.js';
 import Badge from '../../components/common/Badge.jsx';
 import Button from '../../components/common/Button.jsx';
@@ -14,6 +15,8 @@ import ReviewSection from '../../components/products/ReviewSection.jsx';
 export default function ProductDetailPage() {
   const { idOrSlug } = useParams();
   const toast = useToast();
+  const { addToCart, openCart } = useCart();
+  const [addingToCart, setAddingToCart] = useState(false);
 
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -62,10 +65,17 @@ export default function ProductDetailPage() {
   const outOfStock = product.stockQuantity <= 0;
   const lowStock = !outOfStock && product.stockQuantity <= product.lowStockThreshold;
 
-  const handleAddToCartPlaceholder = () => {
-    toast.info(
-      `Ready to add ${quantity} × ${product.name}. Full persistent Cart & Checkout arrives in Phase 7!`
-    );
+  const handleAddToCart = async () => {
+    if (outOfStock || addingToCart) return;
+    setAddingToCart(true);
+    try {
+      const ok = await addToCart(product, quantity);
+      if (ok) {
+        openCart();
+      }
+    } finally {
+      setAddingToCart(false);
+    }
   };
 
   return (
@@ -207,7 +217,8 @@ export default function ProductDetailPage() {
             <Button
               size="lg"
               disabled={outOfStock}
-              onClick={handleAddToCartPlaceholder}
+              loading={addingToCart}
+              onClick={handleAddToCart}
               className="flex-1 sm:flex-none sm:min-w-52"
             >
               <ShoppingBag className="h-4 w-4" />

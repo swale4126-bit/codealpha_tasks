@@ -2,7 +2,7 @@ import { after, before, describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
 import app from '../app.js';
-import pool, { query } from '../config/db.js';
+import { query } from '../config/db.js';
 
 describe('Phase 5 — Categories, Products & Reviews API', () => {
   let adminToken = '';
@@ -48,7 +48,6 @@ describe('Phase 5 — Categories, Products & Reviews API', () => {
         softDeletedProductId,
       ]);
     }
-    await pool.end();
   });
 
   it('GET /api/categories returns seeded categories with product counts', async () => {

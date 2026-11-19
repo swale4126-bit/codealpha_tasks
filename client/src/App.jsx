@@ -6,6 +6,11 @@ import HomePage from './pages/storefront/HomePage.jsx';
 import CatalogPage from './pages/storefront/CatalogPage.jsx';
 import ProductDetailPage from './pages/storefront/ProductDetailPage.jsx';
 import ProfilePage from './pages/storefront/ProfilePage.jsx';
+import CartPage from './pages/storefront/CartPage.jsx';
+import CheckoutPage from './pages/storefront/CheckoutPage.jsx';
+import OrderConfirmationPage from './pages/storefront/OrderConfirmationPage.jsx';
+import OrdersPage from './pages/storefront/OrdersPage.jsx';
+import OrderDetailPage from './pages/storefront/OrderDetailPage.jsx';
 import NotFoundPage from './pages/storefront/NotFoundPage.jsx';
 import LoginPage from './pages/auth/LoginPage.jsx';
 import RegisterPage from './pages/auth/RegisterPage.jsx';
@@ -18,6 +23,39 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<CatalogPage />} />
         <Route path="/products/:idOrSlug" element={<ProductDetailPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <CheckoutPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <OrdersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders/:id"
+          element={
+            <ProtectedRoute>
+              <OrderDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders/:id/confirmation"
+          element={
+            <ProtectedRoute>
+              <OrderConfirmationPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/profile"
           element={
