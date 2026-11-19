@@ -15,3 +15,18 @@ export async function getProductByIdOrSlug(idOrSlug) {
   const res = await api.get(`/products/${idOrSlug}`);
   return res.data.data;
 }
+
+export async function createProduct(productData) {
+  const res = await api.post('/products', productData);
+  return res.data.data;
+}
+
+export async function updateProduct(id, productData) {
+  const res = await api.put(`/products/${id}`, productData);
+  return res.data.data;
+}
+
+export async function deleteProduct(id) {
+  const res = await api.delete(`/products/${id}`);
+  return res.data;
+}

@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import StorefrontLayout from './layouts/StorefrontLayout.jsx';
 import AuthLayout from './layouts/AuthLayout.jsx';
+import AdminLayout from './layouts/AdminLayout.jsx';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 import HomePage from './pages/storefront/HomePage.jsx';
 import CatalogPage from './pages/storefront/CatalogPage.jsx';
@@ -14,6 +15,11 @@ import OrderDetailPage from './pages/storefront/OrderDetailPage.jsx';
 import NotFoundPage from './pages/storefront/NotFoundPage.jsx';
 import LoginPage from './pages/auth/LoginPage.jsx';
 import RegisterPage from './pages/auth/RegisterPage.jsx';
+import AdminDashboardPage from './pages/admin/AdminDashboardPage.jsx';
+import AdminOrdersPage from './pages/admin/AdminOrdersPage.jsx';
+import AdminProductsPage from './pages/admin/AdminProductsPage.jsx';
+import AdminCategoriesPage from './pages/admin/AdminCategoriesPage.jsx';
+import AdminCustomersPage from './pages/admin/AdminCustomersPage.jsx';
 
 export default function App() {
   return (
@@ -71,6 +77,22 @@ export default function App() {
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+      </Route>
+
+      {/* Admin routes (Role-Based Protected) */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requireAdmin>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<AdminDashboardPage />} />
+        <Route path="orders" element={<AdminOrdersPage />} />
+        <Route path="products" element={<AdminProductsPage />} />
+        <Route path="categories" element={<AdminCategoriesPage />} />
+        <Route path="customers" element={<AdminCustomersPage />} />
       </Route>
     </Routes>
   );
